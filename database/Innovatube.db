@@ -1,0 +1,17 @@
+create table users (
+  id uuid primary key default gen_random_uuid(),
+  full_name text not null,
+  username text unique not null,
+  email text unique not null,
+  password text not null,
+  created_at timestamp with time zone default now()
+);
+
+create table favorites (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references users(id) on delete cascade,
+  video_id text not null,
+  title text not null,
+  thumbnail text,
+  created_at timestamp with time zone default now()
+);
