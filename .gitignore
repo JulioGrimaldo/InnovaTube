@@ -1,5 +1,7 @@
 backend/node_modules/
-frontend/node_modules/
-
+backend/.env
 backend/dist/
-frontend/build/
+innovatube-frontend/build/
+innovatube-frontend/node_modules/
+innovatube-frontend/.env
+

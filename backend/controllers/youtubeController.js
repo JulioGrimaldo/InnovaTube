@@ -1,7 +1,7 @@
 const { searchVideos } = require('../services/youtubeServices');
 
 const searchVideosController = async (req, res) => {
-  const { query } = req.query;  // Obtener el término de búsqueda de los parámetros de la solicitud
+  const { query } = req.query;  
 
   if (!query) {
     return res.status(400).json({ error: 'El término de búsqueda es requerido' });

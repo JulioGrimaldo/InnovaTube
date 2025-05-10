@@ -12,7 +12,7 @@ const searchVideos = async (query) => {
         part: 'snippet',
         q: query,
         key: YOUTUBE_API_KEY,
-        maxResults: 10,  // Puedes ajustar este valor
+        maxResults: 10,  
         type: 'video',
       },
     });
