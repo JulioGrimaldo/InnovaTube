@@ -10,6 +10,8 @@ import {
   FormHelperText,
 } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useNavigate } from "react-router-dom";
+import axios from "../api/axiosConfig";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -32,6 +34,8 @@ const Register = () => {
   });
 
   const [recaptchaValue, setRecaptchaValue] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -45,7 +49,7 @@ const Register = () => {
     setErrors({ ...errors, recaptcha: false });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validar los campos
@@ -62,11 +66,23 @@ const Register = () => {
     };
 
     setErrors(newErrors); // Actualizamos el estado de los errores
+    setErrorMessage("");
 
-    // Si no hay errores, procesamos el registro
     if (Object.values(newErrors).every((error) => !error)) {
-      console.log("Datos del formulario:", formData);
-      alert("Registro exitoso"); // Aquí iría la lógica para registrar al usuario
+      try {
+        const payload = {
+          full_name: formData.firstName + " " + formData.lastName,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        };
+        const res = await axios.post("/auth/register", payload);
+        // Si todo va bien, redirigimos a login
+        navigate("/login");
+      } catch (err) {
+        // Mostramos el mensaje de error devuelto por el backend
+        setErrorMessage(err.response?.data?.error || "Error al registrar");
+      }
     }
   };
 
@@ -77,6 +93,11 @@ const Register = () => {
           Registrarme
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate>
+          {errorMessage && (
+            <FormHelperText error sx={{ mb: 2 }} align="center">
+              {errorMessage}
+            </FormHelperText>
+          )}
           <Grid container spacing={2} direction="column">
             <Grid item xs={12}>
               <TextField

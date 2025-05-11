@@ -39,7 +39,7 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          borderRadius: 8, // Bordes redondeados en los campos de texto
+          borderRadius: 8,
         },
       },
     },
