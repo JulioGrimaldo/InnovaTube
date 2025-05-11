@@ -57,7 +57,7 @@ const Login = () => {
         const response = await axios.post("/auth/login", formData);
         const { token } = response.data;
         localStorage.setItem("token", token);
-        navigate("/favorites");
+        navigate("/Home");
       } catch (err) {
         const msg = err.response?.data?.error || "Error al iniciar sesión";
         setErrorMessage(msg);

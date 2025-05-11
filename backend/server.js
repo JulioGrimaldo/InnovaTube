@@ -19,6 +19,7 @@ app.use(express.json());
 app.use("/api/youtube", youtubeRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/favorites", favoriteRoutes);
+//app.use("/api", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("API de Innovatube corriendo");
