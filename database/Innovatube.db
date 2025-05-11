@@ -15,3 +15,8 @@ create table favorites (
   thumbnail text,
   created_at timestamp with time zone default now()
 );
+
+-- Modificar la tabla users para agregar las columnas de recuperación de contraseña
+ALTER TABLE users
+ADD COLUMN reset_token text,
+ADD COLUMN reset_token_expires timestamp with time zone;

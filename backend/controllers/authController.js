@@ -70,8 +70,12 @@ const loginUser = async (req, res) => {
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
   );
+  const { password: _, ...userData } = user;
 
-  res.json({ token });
+  res.json({
+    token,
+    user: userData,
+  });
 };
 
 // Recuperación de contraseña
