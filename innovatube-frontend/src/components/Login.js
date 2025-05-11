@@ -14,12 +14,12 @@ import axios from "../api/axiosConfig";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: "",
+    identifier: "", // Cambiado de 'email' a 'identifier'
     password: "",
   });
 
   const [errors, setErrors] = useState({
-    email: false,
+    identifier: false,
     password: false,
   });
 
@@ -36,31 +36,40 @@ const Login = () => {
       ...errors,
       [e.target.name]: false,
     });
+    setErrorMessage(""); // Limpiar mensajes de error al cambiar los campos
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validación simplificada
     const newErrors = {
-      email:
-        !formData.email ||
-        !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-          formData.email
-        ),
+      identifier: !formData.identifier,
       password: !formData.password,
     };
 
     setErrors(newErrors);
 
-    if (Object.values(newErrors).every((err) => !err)) {
+    if (!newErrors.identifier && !newErrors.password) {
       try {
         const response = await axios.post("/auth/login", formData);
-        const { token, user } = response.data; // Desestructuramos la respuesta para obtener el token y el nombre del usuario
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user)); // Guardamos todo el objeto 'user'
-        navigate("/Home");
+
+        if (response.data.success) {
+          const { token, user } = response.data;
+          localStorage.setItem("token", token);
+          localStorage.setItem("user", JSON.stringify(user));
+          navigate("/home"); // Asegúrate que la ruta sea correcta (case-sensitive)
+        } else {
+          setErrorMessage(
+            response.data.error || "Error en el inicio de sesión"
+          );
+        }
       } catch (err) {
-        const msg = err.response?.data?.error || "Error al iniciar sesión";
+        console.error("Error en login:", err);
+        const msg =
+          err.response?.data?.error ||
+          err.response?.data?.message ||
+          "Error al conectar con el servidor";
         setErrorMessage(msg);
       }
     }
@@ -77,13 +86,13 @@ const Login = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Correo Electrónico"
-                name="email"
-                type="email"
-                value={formData.email}
+                label="Correo Electrónico o Usuario"
+                name="identifier" // Cambiado de 'email' a 'identifier'
+                value={formData.identifier}
                 onChange={handleChange}
-                error={errors.email}
-                helperText={errors.email && "Introduce un correo válido"}
+                error={errors.identifier}
+                helperText={errors.identifier && "Este campo es requerido"}
+                autoComplete="username"
               />
             </Grid>
             <Grid item xs={12}>
@@ -96,6 +105,7 @@ const Login = () => {
                 onChange={handleChange}
                 error={errors.password}
                 helperText={errors.password && "La contraseña es requerida"}
+                autoComplete="current-password"
               />
             </Grid>
 
@@ -110,7 +120,11 @@ const Login = () => {
             <Grid item xs={12} textAlign="center">
               <Typography variant="body2">
                 ¿No tienes una cuenta?{" "}
-                <Button variant="text" onClick={() => navigate("/register")}>
+                <Button
+                  variant="text"
+                  onClick={() => navigate("/register")}
+                  sx={{ textTransform: "none" }}
+                >
                   Regístrate aquí
                 </Button>
               </Typography>
@@ -121,12 +135,19 @@ const Login = () => {
                 component="button"
                 variant="body2"
                 onClick={() => navigate("/forgot-password")}
+                sx={{ textDecoration: "none" }}
               >
                 ¿Olvidaste tu contraseña?
               </Link>
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" fullWidth variant="contained" size="large">
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                size="large"
+                sx={{ mt: 2 }}
+              >
                 Entrar
               </Button>
             </Grid>

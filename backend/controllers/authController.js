@@ -51,31 +51,69 @@ const registerUser = async (req, res) => {
 
 // Login
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { identifier, password } = req.body; // Cambiamos a identifier (puede ser email o username)
 
-  const { data: user, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("email", email)
-    .single();
+  if (!identifier || !password) {
+    return res.status(400).json({
+      error: "Se requieren ambos campos: identificador y contraseña",
+      details: {
+        required: ["identifier", "password"],
+        received: req.body,
+      },
+    });
+  }
 
-  if (error || !user)
-    return res.status(400).json({ error: "Usuario no encontrado" });
+  try {
+    // Buscar usuario por email o username
+    const { data: user, error } = await supabase
+      .from("users")
+      .select("*")
+      .or(`email.eq.${identifier},username.eq.${identifier}`)
+      .single();
 
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) return res.status(401).json({ error: "Contraseña incorrecta" });
+    if (error || !user) {
+      return res.status(400).json({
+        error: "Credenciales inválidas",
+        suggestion: "Verifica tu email/usuario y contraseña",
+      });
+    }
 
-  const token = jwt.sign(
-    { id: user.id, username: user.username },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
-  const { password: _, ...userData } = user;
+    // Verificar contraseña
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      return res.status(401).json({
+        error: "Credenciales inválidas",
+        suggestion: "Verifica tu contraseña",
+      });
+    }
 
-  res.json({
-    token,
-    user: userData,
-  });
+    // Generar token JWT
+    const token = jwt.sign(
+      {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    // Eliminar password de la respuesta
+    const { password: _, ...userData } = user;
+
+    res.json({
+      success: true,
+      token,
+      user: userData,
+      message: "Inicio de sesión exitoso",
+    });
+  } catch (err) {
+    console.error("Error en login:", err);
+    res.status(500).json({
+      error: "Error interno del servidor",
+      details: process.env.NODE_ENV === "development" ? err.message : undefined,
+    });
+  }
 };
 
 // Recuperación de contraseña

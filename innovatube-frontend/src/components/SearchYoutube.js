@@ -192,7 +192,7 @@ const SearchYoutube = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           sx={{ flex: 1, minWidth: "300px" }}
-          placeholder="Ejemplo: tutorial react"
+          placeholder="Ejemplo: Contratenme por favor"
         />
         <Button
           type="submit"

@@ -8,23 +8,40 @@ const Navbar = ({ onLogout = () => {} }) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    console.log(storedUser);
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
   }, []);
 
+  const handleLogoClick = () => {
+    navigate("/home"); // Nueva función para navegar a home
+  };
+
+  const handleFavoriteClick = () => {
+    navigate("/favorites");
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     onLogout();
-    navigate("/login"); // Redirige al login
+    navigate("/login");
   };
 
   return (
     <AppBar position="static" color="default" elevation={2}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: "bold",
+            cursor: "pointer", // Cambia el cursor para indicar que es clickeable
+            "&:hover": {
+              color: "primary.main", // Cambia el color al pasar el mouse
+            },
+          }}
+          onClick={handleLogoClick} // Añade el onClick al logo
+        >
           InnovaTube
         </Typography>
 
@@ -32,8 +49,11 @@ const Navbar = ({ onLogout = () => {} }) => {
           <Typography variant="body1" sx={{ fontWeight: 500 }}>
             {user?.full_name || "Invitado"}
           </Typography>
+          <Button color="inherit" onClick={handleFavoriteClick}>
+            Mis Favoritos
+          </Button>
           <Button color="error" onClick={handleLogout}>
-            Log out
+            Cerrar Sesión
           </Button>
         </Box>
       </Toolbar>
