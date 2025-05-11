@@ -55,8 +55,9 @@ const Login = () => {
     if (Object.values(newErrors).every((err) => !err)) {
       try {
         const response = await axios.post("/auth/login", formData);
-        const { token } = response.data;
+        const { token, user } = response.data; // Desestructuramos la respuesta para obtener el token y el nombre del usuario
         localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user)); // Guardamos todo el objeto 'user'
         navigate("/Home");
       } catch (err) {
         const msg = err.response?.data?.error || "Error al iniciar sesión";

@@ -1,14 +1,13 @@
 import React from "react";
-import LoginForm from "../components/Login";
-import { Container, Box } from "@mui/material";
+import Navbar from "../components/Navbar";
+import SearchYoutube from "../components/SearchYoutube";
 
 const Home = () => {
   return (
-    <Container maxWidth="xs">
-      <Box sx={{ mt: 8 }}>
-        <LoginForm />
-      </Box>
-    </Container>
+    <>
+      <Navbar />
+      <SearchYoutube />
+    </>
   );
 };
 
