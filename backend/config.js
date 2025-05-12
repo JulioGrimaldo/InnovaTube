@@ -1,0 +1,12 @@
+export const PORT = process.env.PORT;
+export const SUPABASE_KEY = process.env.SUPABASE_KEY;
+export const SUPABASE_URL = process.env.SUPABASE_URL;
+export const JWT_SECRET = process.env.JWT_SECRET;
+export const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
+export const SMTP_HOST = process.env.SMTP_HOST;
+export const SMTP_PORT = process.env.SMTP_PORT;
+export const SMTP_SECURE = process.env.SMTP_SECURE;
+export const SMTP_USER = process.env.SMTP_USER;
+export const SMTP_PASS = process.env.SMTP_PASS;
+export const RECOVER_LINK = process.env.RECOVER_LINK;
+export const ORIGIN = process.env.ORIGIN;

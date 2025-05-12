@@ -1,16 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-
+const { PORT, ORIGIN } = require("./config");
 const authRoutes = require("./routes/authRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const youtubeRoutes = require("./routes/youtubeRoutes");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 app.use(
   cors({
-    origin: "http://localhost:3000", // Solo este origen puede acceder
+    origin: ORIGIN, // Solo este origen puede acceder
     credentials: true, // Permitir el uso de cookies/cabeceras de auth
   })
 );
@@ -30,5 +29,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://localhost:${PORT || 5000}`);
 });

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_URL } from "../config";
 import {
   TextField,
   Button,
@@ -33,7 +34,7 @@ const ResetPasswordForm = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/auth/reset-password/${token}`,
+        `${API_URL}/auth/reset-password/${token}`,
         { password: newPassword }
       );
       setSuccess("Contraseña restablecida con éxito");

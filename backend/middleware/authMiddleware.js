@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-
+const { JWT_SECRET } = require("../config");
 const verifyToken = (req, res, next) => {
   // 1. Compatibilidad con headers Authorization y authorization
   const authHeader =
@@ -18,7 +18,7 @@ const verifyToken = (req, res, next) => {
 
   try {
     // 4. Verificación del token (igual que tu versión)
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
 
     // 5. Asignación a req.user (manteniendo tu estructura)
     req.user = decoded;

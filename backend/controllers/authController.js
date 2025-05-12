@@ -1,3 +1,12 @@
+const {
+  SMTP_HOST,
+  SMTP_PORT,
+  SMTP_USER,
+  SMTP_PASS,
+  SMTP_SECURE,
+  JWT_SECRET,
+  RECOVER_LINK,
+} = require("../config.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
@@ -6,18 +15,18 @@ const nodemailer = require("nodemailer");
 
 // Configuración de MailerSend
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT),
-  secure: process.env.SMTP_SECURE === "true",
+  host: SMTP_HOST,
+  port: parseInt(SMTP_PORT),
+  secure: SMTP_SECURE === "true",
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
+    user: SMTP_USER,
+    pass: SMTP_PASS,
   },
 });
 
 // Enviar correo de recuperación
 const sendRecoveryEmail = async (email, token) => {
-  const recoveryLink = `http://localhost:3000/reset-password/${token}`;
+  const recoveryLink = RECOVER_LINK + token;
 
   const mailOptions = {
     from: '"InnovaTube" <MS_bedcRK@test-r83ql3pp17zgzw1j.mlsender.net>',
@@ -94,7 +103,7 @@ const loginUser = async (req, res) => {
         username: user.username,
         email: user.email,
       },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: "1d" }
     );
 

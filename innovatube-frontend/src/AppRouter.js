@@ -1,5 +1,7 @@
 // src/AppRouter.js
 import React from "react";
+import { Navigate } from "react-router-dom";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/LoginPage";
@@ -15,6 +17,7 @@ import Favorites from "./components/Favorites"; // Página de favoritos
 const AppRouter = () => {
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route element={<PrivateRoute />}>

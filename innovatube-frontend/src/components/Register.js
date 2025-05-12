@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { CAPTCHA_KEY } from "../config";
 import {
   Container,
   Typography,
@@ -186,7 +187,7 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <ReCAPTCHA
-                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                sitekey={CAPTCHA_KEY}
                 onChange={handleRecaptchaChange}
               />
               {errors.recaptcha && (
