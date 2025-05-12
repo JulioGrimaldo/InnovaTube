@@ -22,6 +22,7 @@ const FavoritesPage = () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const token = localStorage.getItem("token");
+      console.log("");
       return { user, token };
     } catch (error) {
       console.error("Error getting auth data:", error);
