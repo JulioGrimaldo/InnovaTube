@@ -4,9 +4,10 @@ Frontend
 React + MaterialUI 
 
 Backend 
-Node + Express + JWT bcrypt 
+Node + Express + JWT bcrypt + Nodemailer
 
 Base de datos 
+Supabase
 
 Deploy en Railway
 
